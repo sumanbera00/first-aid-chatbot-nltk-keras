@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Lookup and Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px; /* Chatbot bar resolution */
+            height: 80%;
+            max-height: 600px; /* Chatbot bar resolution */
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #333333;
+        }
+        .chat-log {
+            height: 200px; /* Chat log height */
+            overflow-y: scroll;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: calc(100% - 80px); /* Adjust width for input field */
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 80px; /* Fixed width for button */
+            padding: 10px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        label {
+            margin-right: 10px;
+        }
+        #hospitalResult {
+            width: 100%; /* Adjust width for hospital result */
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chatbot</h1>
+        <div class="chat-log" id="chatLog"></div>
+        <form id="chatForm">
+            <input type="text" id="chatInput" placeholder="Type your message here...">
+            <button type="button" onclick="sendMessage()">Send</button>
+        </form>
+
+        <hr>
+
+        <h1>Hospital Lookup</h1>
+        <form id="hospitalForm" style="margin-bottom: 0;">
+            <input type="text" id="pincode" name="pincode" placeholder="Enter Pincode" style="width: calc(100% - 90px); margin-right: 10px;">
+            <button type="submit" style="width: 80px;">Lookup</button>
+        </form>
+        <div id="hospitalResult"></div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            var message = document.getElementById('chatInput').value;
+            document.getElementById('chatInput').value = '';
+            var chatLog = document.getElementById('chatLog');
+            chatLog.innerHTML += '<p>You: ' + message + '</p>';
+            fetch('/chatbot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'message=' + encodeURIComponent(message)
+            })
+            .then(response => response.json())
+            .then(data => {
+                chatLog.innerHTML += '<p>Bot: ' + data.response + '</p>';
+                chatLog.scrollTop = chatLog.scrollHeight;
+            });
+        }
+
+        document.getElementById('hospitalForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var pincode = document.getElementById('pincode').value;
+            fetch('/lookup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'pincode=' + encodeURIComponent(pincode)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('hospitalResult').innerText = data.result;
+            });
+        });
+    </script>
+</body>
+</html>
