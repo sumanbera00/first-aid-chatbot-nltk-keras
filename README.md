@@ -21,3 +21,4 @@ Interact with the chatbot by entering your queries into the input box provided o
 Explore the hospital lookup feature by entering pincode information and accessing nearby medical facilities.
 Provide feedback or contribute to the project to help improve its functionality and usability for all users.
 Whether you're seeking quick first aid guidance or looking to contribute to the advancement of NLP-driven chatbot technology, this repository offers a valuable platform for both users and developers alike. Join us in our mission to make first aid information accessible and readily available to everyone!
+![Screenshot 2024-04-01 053843](https://github.com/sumanbera00/first-aid-chatbot-nltk-keras/assets/132657660/79bc90a6-c589-40d1-b9a7-bd87089c9773)
